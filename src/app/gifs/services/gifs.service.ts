@@ -27,7 +27,12 @@ export class GifsService {
     }
 
     this._tagsHistory.unshift(tag);// con esto coloco el tag al inicio
-    this._tagsHistory = this._tagsHistory.splice(0,10)
+    this._tagsHistory = this._tagsHistory.splice(0, 10);
+    this.saveLocalStorage();
+  }
+
+  private saveLocalStorage(): void {
+    localStorage.setItem('history', JSON.stringify(this._tagsHistory))
   }
 
   searchTag(tag: string): void {
@@ -40,10 +45,10 @@ export class GifsService {
       .set('limit', 10)
       .set('q', tag)
 
-    this.http.get<SearchResponse>(`${this.serviceUrl}/search`, {params})
-      .subscribe( resp => {
+    this.http.get<SearchResponse>(`${this.serviceUrl}/search`, { params })
+      .subscribe(resp => {
         this.gifList = resp.data;
-        console.log({gifs: this.gifList});
+        console.log({ gifs: this.gifList });
       })
     // this._tagsHistory.unshift(tag);
     // console.log(this._tagsHistory);
